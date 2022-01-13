@@ -1,0 +1,57 @@
+﻿@*@model WebApplication1.Models.ActivitiesModel*@
+@model WebApplication1.Models.NewActivityModel
+@{
+
+    ViewData["Title"] = "New Activity";
+    int clientNumber = 0;
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />  
+
+</head>
+<body>
+   <h1>Esse é um teste</h1>
+
+   <div class="form-group">
+       <select id="ClientName" onchange="selectedOption()">
+           <option selected="true" onclick="selectedOption" >Selecione um cliente</option>
+           @foreach(ClientModel m in Model.client){
+                <option value=@m.ClientId>@m.Name</option>
+            }
+        </select>
+        <select id="TaskList" style="display:none;">
+            <option selected="true" value="">Selecione um cliente</option>
+            @foreach(TaskListModel t in Model.tasks)
+            {                 
+                <option value=@t.Description>@t.Description @t.ClientId </option>
+                             
+            }
+
+        </select>
+      
+   </div>
+
+   @*@ViewData["Message"]*@  
+ @*   @foreach(ClientModel m in Model.client)
+    {
+        <h3>@Html.DisplayFor(modelItem => m.Name)</h3>
+    }*@
+</body>
+</html>
+
+<script type="text/javascript">
+    function selectedOption(){
+        @clientNumber = document.getElementById("ClientName").value
+        document.getElementById("TaskList").style.display = "block"       
+        
+        alert(clientNumber)
+    }
+</script>
+
+
+
+
