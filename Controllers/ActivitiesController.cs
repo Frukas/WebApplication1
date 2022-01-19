@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using System.Text.Json;
 
 namespace WebApplication1.Controllers
 {
@@ -16,6 +17,7 @@ namespace WebApplication1.Controllers
     public class ActivitiesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private NewActivityModel newActivityModel = new NewActivityModel();
 
         public ActivitiesController(ApplicationDbContext context)
         {
@@ -31,11 +33,20 @@ namespace WebApplication1.Controllers
         // GET: Activities/NewActivity
         public IActionResult NewActivity()
         {
-            NewActivityModel newActivityModel = new NewActivityModel();
+            
             //newActivityModel.client = _context.clientModels.ToList();
-            newActivityModel.client = _context.clientModels.Where(c => c.IsActive == true).ToList();
-            newActivityModel.tasks = _context.taskListModels.Where(t => t.IsActive == true).ToList();
+            newActivityModel.Client = _context.clientModels.Where(c => c.IsActive == true).ToList();
+            //newActivityModel.Tasks = _context.taskListModels.Where(t => t.IsActive == true).ToList();
             return View(newActivityModel);
+        }
+
+        // GET: Activities/GetClientTask
+        [HttpGet]
+        public string GetClientTask(int id)
+        {
+            var task = _context.taskListModels.Where(t => t.IsActive == true && t.ClientId == id).ToList();
+
+            return  JsonSerializer.Serialize(task);
         }
 
         // GET: Activities/Details/5

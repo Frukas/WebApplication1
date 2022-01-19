@@ -2,8 +2,8 @@
 @model WebApplication1.Models.NewActivityModel
 @{
 
-    ViewData["Title"] = "New Activity";
-    int clientNumber = 0;
+    ViewData["Title"] = "New Activity";  
+    
 
 }
 
@@ -19,17 +19,13 @@
    <div class="form-group">
        <select id="ClientName" onchange="selectedOption()">
            <option selected="true" onclick="selectedOption" >Selecione um cliente</option>
-           @foreach(ClientModel m in Model.client){
+           @foreach(ClientModel m in Model.Client){
                 <option value=@m.ClientId>@m.Name</option>
             }
         </select>
         <select id="TaskList" style="display:none;">
             <option selected="true" value="">Selecione um cliente</option>
-            @foreach(TaskListModel t in Model.tasks)
-            {                 
-                <option value=@t.Description>@t.Description @t.ClientId </option>
-                             
-            }
+          
 
         </select>
       
@@ -44,11 +40,34 @@
 </html>
 
 <script type="text/javascript">
-    function selectedOption(){
-        @clientNumber = document.getElementById("ClientName").value
-        document.getElementById("TaskList").style.display = "block"       
+     
+
+    function selectedOption(){       
+               
+        clientNumber = document.getElementById("ClientName").value 
+       
         
-        alert(clientNumber)
+       const rjson = fetch('/Activities/GetClientTask?id=' + clientNumber )
+            .then(response => response.json())
+            .then(jrs =>{
+                getResult(jrs)   
+                document.getElementById("TaskList").style.display = "block"
+            } )
+            .catch(err => {
+                alert("Error getting the tasks.")
+                console.log(err);
+                throw err;
+            })            
+    }
+
+    function getResult(response){        
+        response.map( item => {
+            let option = document.createElement("option")
+            let select = document.getElementById("TaskList")
+            option.text = item.Description
+            option.value = item.Description        
+            select.appendChild(option)
+        })       
     }
 </script>
 
