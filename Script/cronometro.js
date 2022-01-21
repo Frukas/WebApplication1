@@ -88,3 +88,7 @@ function getCurrentTime(){
     return (currentTime /1000) | 0
 }
 
+function jsFunciona() {
+    alert("Oi eu funci")
+}
+

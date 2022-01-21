@@ -32,11 +32,8 @@ namespace WebApplication1.Controllers
        
         // GET: Activities/NewActivity
         public IActionResult NewActivity()
-        {
-            
-            //newActivityModel.client = _context.clientModels.ToList();
-            newActivityModel.Client = _context.clientModels.Where(c => c.IsActive == true).ToList();
-            //newActivityModel.Tasks = _context.taskListModels.Where(t => t.IsActive == true).ToList();
+        {           
+            newActivityModel.Client = _context.clientModels.Where(c => c.IsActive == true).ToList();            
             return View(newActivityModel);
         }
 

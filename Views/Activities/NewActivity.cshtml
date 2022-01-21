@@ -1,14 +1,12 @@
-﻿@*@model WebApplication1.Models.ActivitiesModel*@
-@model WebApplication1.Models.NewActivityModel
+﻿@model WebApplication1.Models.NewActivityModel
+
 @{
-
-    ViewData["Title"] = "New Activity";  
-    
-
+    ViewData["Title"] = "New Activity";
 }
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />  
 
@@ -25,32 +23,27 @@
         </select>
         <select id="TaskList" style="display:none;">
             <option selected="true" value="">Selecione um cliente</option>
-          
-
-        </select>
+        </select> 
+        
+        <h2 id="count">ola</h2>
+        <button onclick="digaOI()">OK!</button>
       
    </div>
-
-   @*@ViewData["Message"]*@  
- @*   @foreach(ClientModel m in Model.client)
-    {
-        <h3>@Html.DisplayFor(modelItem => m.Name)</h3>
-    }*@
 </body>
 </html>
 
-<script type="text/javascript">
-     
+<script type="text/javascript">  
+    
+    let xOi = 1
 
     function selectedOption(){       
                
-        clientNumber = document.getElementById("ClientName").value 
-       
+        clientNumber = document.getElementById("ClientName").value        
         
        const rjson = fetch('/Activities/GetClientTask?id=' + clientNumber )
             .then(response => response.json())
             .then(jrs =>{
-                getResult(jrs)   
+                generateOption(jrs)   
                 document.getElementById("TaskList").style.display = "block"
             } )
             .catch(err => {
@@ -60,7 +53,7 @@
             })            
     }
 
-    function getResult(response){        
+    function generateOption(response){        
         response.map( item => {
             let option = document.createElement("option")
             let select = document.getElementById("TaskList")
@@ -68,6 +61,13 @@
             option.value = item.Description        
             select.appendChild(option)
         })       
+    }
+
+    function digaOI(){
+        
+        document.getElementById("count").innerHTML = xOi
+
+        xOi++
     }
 </script>
 

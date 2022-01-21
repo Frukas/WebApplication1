@@ -2,7 +2,6 @@
 {
     public class NewActivityModel
     {
-        public List<ClientModel> Client { get; set; }
-        public List<TaskListModel> Tasks { get; set; }
+        public List<ClientModel> Client { get; set; }        
     }
 }
