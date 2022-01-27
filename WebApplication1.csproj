@@ -8,11 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\teste.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\js\teste.js" />
+    <Content Remove="Views\Activities\NewTask.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -13,28 +13,64 @@
 </head>
 <body>
    <h1>Esse é um teste</h1>
-
-   <div class="form-group">
-       <select id="ClientName" onchange="selectedOption()">
-           <option selected="true" onclick="selectedOption" >Selecione um cliente</option>
-           @foreach(ClientModel m in Model.Client){
-                <option value=@m.ClientId>@m.Name</option>
-            }
-        </select>
-        <select id="TaskList" style="display:none;">
-            <option selected="true" value="">Selecione um cliente</option>
-        </select> 
-        
-        <h2 id="count">ola</h2>
-        <button onclick="digaOI()">OK!</button>
+   <form>
+       <div class="form-group">
+           <select id="ClientName" onchange="selectedOption()">
+               <option selected="true" onclick="selectedOption" >Selecione um cliente</option>
+               @foreach(ClientModel m in Model.Client){
+                    <option value=@m.ClientId >@m.Name</option>
+                }
+            </select>
+            <select id="TaskList" style="display:none;">
+                <option selected="true" value="">Selecione um cliente</option>
+            </select>         
+       
+            <h2 id="tempo1">00:00:00</h2>
+            <button id="btn1" onclick="iniciaTimer()">Iniciar</button>
+            <button onclick="pararTimer()">Parar</button>
       
-   </div>
+       </div>
+
+   
+		<div class="form-row">
+		
+			<div class="form-group col-md-8">
+				<h4 >Comentários</h4>
+				<input type="text" name="comentarios" id="comentarios" class="form-control" ></input>
+			</div>
+				
+			<div class="form-group col-md-2">
+			<h4 >Solicitações</h4>
+				<input type="number" name="solicitacao" id="solicitacao" class="form-control" ></input>
+			</div>
+
+			<div class="form-group col-md-2">
+			<h4 >Atividades</h4>
+				<input type="number" name="atividadeQ" id="atividadeQ" class="form-control" ></input>
+			</div>
+
+			<div>			
+				<input class="form-check-input" id="kengaku" type="checkbox" value="Shadowning"></input>
+				<p class="h4" style="display: inline">kengaku</p>
+			</div>
+		</div>
+        
+       
+        <input type="submit" value="CreateNewTask" />
+	</form>	
+    <br/>
+    <br/>
+    <input type="date" id="TimerTest" />
+    <button onclick="postNewActivity()">POstar</button>
+
 </body>
 </html>
 
 <script type="text/javascript">  
     
-    let xOi = 1
+    let startTime = 0
+    let currentTime = 0
+    let interval
 
     function selectedOption(){       
                
@@ -61,13 +97,62 @@
             option.value = item.Description        
             select.appendChild(option)
         })       
+    }    
+
+    function iniciaTimer(){ 
+
+        const timeHourMinSec = new Date()   
+    
+        if(startTime <= 0){
+            startTime = Date.now() 
+        } else{
+            startTime = Date.now() - currentTime
+        }  
+
+        let posAlarmTime = 0
+
+        document.getElementById("btn1").disabled = true    
+    
+	    interval = setInterval(() => {
+            currentTime = Date.now() - startTime
+            timeHourMinSec.setTime(currentTime)
+            document.getElementById("tempo1").innerHTML = timeHourMinSec.toISOString().substr(11, 8)
+
+            //checkAlarm(currentTime)
+
+        },1000);    
     }
 
-    function digaOI(){
-        
-        document.getElementById("count").innerHTML = xOi
+    function pararTimer(){  
+    
+	    clearInterval(interval);
+	    document.getElementById("btn1").disabled = false;   
+    }
 
-        xOi++
+        function postNewActivity(){        
+        
+        //Estrutura só de teste.
+        let data = {
+            //Id: 2,
+            IdService: 13,
+            IdOperator: 14,
+            StartTime: document.getElementById("TimerTest").value,
+            EndTIme: document.getElementById("TimerTest").value,
+            Comment : "Um teste",
+            Time: 1,
+            IsActive: true,
+            IsShadowing: true,
+            IsExtraTime: true
+        }        
+
+        fetch('/Activities/TesteDePost', {
+          method: "POST",
+          body: JSON.stringify(data),         
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+          }         
+        }) 
     }
 </script>
 

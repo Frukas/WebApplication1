@@ -86,6 +86,37 @@ namespace WebApplication1.Controllers
             return View(activitiesModel);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateNewActivity([Bind("Id,IdService,IdOperator,StartTime,EndTIme,Comment,Time,IsActive,IsShadowing,IsExtraTime")] ActivitiesModel activitiesModel)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(activitiesModel);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(activitiesModel);
+        }
+        [HttpPost]
+        public async Task<bool> TesteDePost([Bind("Id,IdService,IdOperator,StartTime,EndTIme,Comment,Time,IsActive,IsShadowing,IsExtraTime")] ActivitiesModel data)            
+        {           
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(data);
+                var num =  await _context.SaveChangesAsync();
+                Console.WriteLine("ok");
+            }
+            else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                Console.WriteLine(errors);
+            }
+                     
+            return true;
+        }
+
         // GET: Activities/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

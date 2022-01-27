@@ -58,7 +58,7 @@ function zera(){
     currentTime = 0
 }
 
-function para(){  
+function parar(){  
     
 	clearInterval(interval);
 	document.getElementById("btn1").disabled = false;   
